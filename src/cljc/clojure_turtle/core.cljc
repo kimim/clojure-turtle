@@ -22,7 +22,7 @@
   #?(:clj
      (:import java.util.Date)))
 
-  
+
 
 ;;
 ;; constants
@@ -143,12 +143,16 @@
                      (update-in [:commands] conj [:setheading new-angle]))))]
        (alter-turtle turt-state add-angle))))
 
+(def r right)
+
 (defn left
   "Same as right, but turns the turtle counter-clockwise."
   ([ang]
      (right (* -1 ang)))
   ([turt-state ang]
      (right turt-state (* -1 ang))))
+
+(def l left)
 
 (def deg->radians q/radians)
 
@@ -169,8 +173,10 @@
            alter-fn (fn [t] (-> t
                                (update-in [:x] + dx)
                                (update-in [:y] + dy)
-                               (update-in [:commands] conj [:translate [dx dy]])))] 
+                               (update-in [:commands] conj [:translate [dx dy]])))]
        (alter-turtle turt-state alter-fn))))
+
+(def f forward)
 
 (defn back
   "Same as forward, but move the turtle backwards, which is opposite of the direction it is facing."
@@ -178,6 +184,8 @@
      (forward (* -1 len)))
   ([turt-state len]
      (forward turt-state (* -1 len))))
+
+(def b back)
 
 (defn penup
   "Instruct the turtle to pick its pen up. Subsequent movements will not draw to screen until the pen is put down again."
@@ -207,7 +215,7 @@
      (letfn [(alter-fn [t]
                (-> t
                    (assoc :fill true)
-                   (update-in [:commands] conj [:start-fill])))] 
+                   (update-in [:commands] conj [:start-fill])))]
        (alter-turtle turt-state alter-fn))))
 
 (defn end-fill
@@ -235,7 +243,7 @@
 #?(:clj
    (defmacro repeat
      "A macro to translate the purpose of the Logo REPEAT function."
-     [n & body] 
+     [n & body]
      `(let [states# (repeatedly ~n ~@body)]
         (dorun
          states#)
@@ -269,7 +277,7 @@
      (setxy turtle x y))
   ([turt-state x y]
      (let [pen-down? (get @turt-state :pen)]
-       (letfn [(alter-fn [t] 
+       (letfn [(alter-fn [t]
                  (-> t
                      (assoc :x x)
                      (assoc :y y)
@@ -292,7 +300,7 @@
   ([]
      (home turtle))
   ([turt-state]
-     (setxy turt-state 0 0) 
+     (setxy turt-state 0 0)
      (setheading turt-state 90)))
 
 ;;
@@ -304,7 +312,7 @@
   []
   (q/background 200)                 ;; Set the background colour to
                                      ;; a nice shade of grey.
-  (q/stroke-weight 1))
+  (q/stroke-weight 5))
 
 (defn setup
   "A helper function for the Quil rendering function."
@@ -323,8 +331,8 @@
      (let [
            ;; set up a copy of the turtle to draw the triangle that
            ;; will represent / show the turtle on the graphics canvas
-           short-leg 5
-           long-leg 12
+           short-leg 20
+           long-leg 40
            hypoteneuse (Math/sqrt (+ (* short-leg short-leg)
                                      (* long-leg long-leg)))
            large-angle  (-> (/ long-leg short-leg)
@@ -423,7 +431,7 @@
   ;; Draw the lines of where the turtle has been.
   (draw-turtle-commands @turt-state)
   ;; Draw the sprite (triangle) representing the turtle itself.
-  (let [sprite (get-turtle-sprite @turt-state)] 
+  (let [sprite (get-turtle-sprite @turt-state)]
     (draw-turtle-commands @sprite))
   ;; Undo the graphing plane transformation in Quil/Processing
   (q/pop-matrix)
@@ -464,4 +472,5 @@
           :title ~title
           :setup setup
           :draw draw
-          :size ~size))))
+          :size ~size
+          :renderer :p3d))))

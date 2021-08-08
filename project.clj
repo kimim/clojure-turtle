@@ -11,9 +11,9 @@
                                [:name "Elango Cheran"]
                                [:email "elango@google.com"]
                                [:timezone "-8"]]]
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.170"]
-                 [quil "2.2.6"]]
+  :dependencies [[org.clojure/clojure "1.10.3"]
+                 [org.clojure/clojurescript "1.10.866"]
+                 [quil "3.1.0"]]
 
   :source-paths ["src/cljc" "src/cljs"]
 
@@ -36,4 +36,4 @@
   :figwheel {:http-server-root ""
              :repl true}
 
-  :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"]) 
+  :jar-exclusions [#"\.cljx|\.swp|\.swo|\.DS_Store"])
